@@ -16,31 +16,35 @@ let correoElec
 //variable de la opcion
 let opc
 
-userCreate()
+menuPrincipal()
 
-do
+function menuPrincipal()
 {
-opc = parseInt(prompt('Ingrese la opcion que desea utilizar: \n Opcion 0: Salir \n Opcion 1: Agregar productos a carrito \n Opcion 2: Ver carrito \n Opcion 3: Pagar \n Opcion 4: Cambiar Informacion de Usuario'))
-switch(opc)
-{
-    case 0:
-        alert('Gracias por comprar con nosotros')
-        break
-    case 1:
-        comprar()
-        break
-    case 2:
-        carrito()
-        break
-    case 3:
-        pagar()
-        break
-    case 4:
-        modificarUser()
-        break
+    userCreate()
+    do
+    {
+        opc = parseInt(prompt('Ingrese la opcion que desea utilizar: \n Opcion 0: Salir \n Opcion 1: Agregar productos a carrito \n Opcion 2: Ver carrito \n Opcion 3: Pagar \n Opcion 4: Cambiar Informacion de Usuario'))
+        switch(opc)
+        {
+            case 0:
+                alert('Gracias por comprar con nosotros')
+                break
+            case 1:
+                comprar()
+                break
+            case 2:
+                carrito()
+                break
+            case 3:
+                pagar()
+                break
+            case 4:
+                modificarUser()
+                break
+        }
+    }while (opc != 0)
 }
 
-}while (opc != 0)
 function comprar()
 {
     let opcCompra 
