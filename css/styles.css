@@ -1,0 +1,567 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel&family=Fauna+One&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-style: normal;
+  font-weight: 400; }
+
+body {
+  background-color: #F5E78E;
+  font-family: 'Fauna One', serif;
+  color: #826754;
+  font-size: 20px; }
+
+header {
+  background-color: #384073; }
+
+a {
+  text-decoration: none; }
+
+h1 {
+  font-size: 55px; }
+
+h2 {
+  font-size: 48px; }
+
+h3 {
+  font-size: 40px; }
+
+h4 {
+  font-size: 40px; }
+
+h6, h5, h4, h3, h2, h1 {
+  margin-bottom: 0; }
+
+figure {
+  margin: 0; }
+
+p {
+  margin-bottom: 0; }
+
+ol, ul, dl {
+  margin-bottom: 0; }
+
+article {
+  padding: 0px; }
+
+.enlaces-estilo {
+  font-size: 18px;
+  color: #FFFFFF;
+  padding: 5px 10px;
+  transition: background-image .2s;
+  transition: background-color .2s;
+  transition: font-size .2s; }
+  .enlaces-estilo:hover {
+    font-size: 22px;
+    background-image: url(../visuales/galletaSinComer-min.webp);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-color: #826754;
+    margin: 0px 5px;
+    border-radius: 10px;
+    color: #FFFFFF; }
+  .enlaces-estilo:active {
+    background-image: url(../visuales/galletaComida-min.webp);
+    color: #FFFFFF; }
+
+.barra-intermedia {
+  font-size: 18px;
+  color: #FFFFFF;
+  padding: 5px 0px; }
+
+.estilos-titulos {
+  font-family: 'Cinzel';
+  text-align: center;
+  color: white;
+  letter-spacing: 0.1em; }
+
+.parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; }
+
+.titulo-estilo-sec {
+  font-size: 55px;
+  color: #826754;
+  margin-top: 28px; }
+
+.subtitulo-estilo-sec {
+  font-size: 25px;
+  color: #826754;
+  margin-bottom: 28px; }
+
+.boton-estilo {
+  display: inline-block;
+  text-align: center;
+  font-family: 'Fauna One', serif;
+  font-size: 17px;
+  color: black;
+  border: none;
+  border-radius: 12px;
+  background-color: #A3D9FF;
+  padding: 3px 8px;
+  transition: transform .04s ease-out;
+  transition: background-color .04s ease-out; }
+  .boton-estilo:active {
+    transform: scale(0.95);
+    background-color: #73c5ff; }
+
+.boton-redondo {
+  width: 37px;
+  height: 37px;
+  border-radius: 50%; }
+
+.paragraph-style {
+  text-align: justify; }
+
+header .img-nav {
+  width: 100%; }
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #384073;
+  color: #FFFFFF;
+  height: auto;
+  padding: 28px 0px;
+  font-family: 'Cinzel'; }
+  footer .copyfooter {
+    font-size: 18px;
+    text-align: center; }
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  padding: 0px 10px;
+  margin-bottom: 30px; }
+  .footer .footer-info {
+    border: solid;
+    border-color: #282D53;
+    border-radius: 10px;
+    border-width: 4px;
+    padding: 7px; }
+  .footer .footer-ubicacion {
+    border-radius: 10px;
+    width: 600px;
+    height: 220px;
+    padding: 4px;
+    background-color: #282D53; }
+  .footer .info-titulos {
+    font-size: 30px;
+    text-decoration: underline #826754; }
+  .footer .info-datos {
+    font-size: 20px;
+    text-indent: 15px; }
+
+.superphoto {
+  height: 92vh;
+  overflow: hidden;
+  background-image: url(../visuales/muchasGalletas-min.webp);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; }
+
+.titulo-inicio {
+  padding: 28px; }
+
+.secondarytitle {
+  padding: 28px; }
+
+#historia {
+  display: flex;
+  justify-content: center; }
+
+.box-historia {
+  display: grid;
+  gap: 14px;
+  grid-template-rows: repeat(3, auto);
+  grid-template-columns: repeat(2, 1fr);
+  margin: 28px 80px;
+  max-width: 1280px;
+  grid-template-areas: "texto fotoGalleta" "fotoBandeja fotoGalleta" "textoDos textoDos"; }
+  .box-historia :nth-child(1) {
+    grid-area: texto; }
+  .box-historia :nth-child(2) {
+    border-radius: 0px 0px 0px 38px;
+    grid-area: fotoBandeja;
+    overflow: hidden; }
+    .box-historia :nth-child(2) .img-historia-uno {
+      height: 100%; }
+  .box-historia :nth-child(3) {
+    grid-area: fotoGalleta;
+    border-radius: 0px 38px 38px 0px;
+    overflow: hidden; }
+    .box-historia :nth-child(3) .img-historia-dos {
+      border-radius: 0px 38px 38px 0px;
+      height: 100%; }
+  .box-historia :nth-child(4) {
+    grid-area: textoDos; }
+
+.background-inter {
+  height: 600px;
+  background-image: url(../visuales/andrew-valdivia-Way9MgCwFg8-unsplash_2-min.webp);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; }
+  .background-inter .box-width {
+    width: 1280px;
+    padding: 28px; }
+
+.box-present {
+  display: grid;
+  gap: 20px;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(2, 1fr);
+  overflow: hidden;
+  justify-items: center;
+  margin: 28px 0px; }
+  .box-present .present-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; }
+    .box-present .present-section .title-present {
+      font-size: 32px;
+      color: #826754; }
+    .box-present .present-section .img-presentacion {
+      height: 278px;
+      max-width: 573px;
+      overflow: hidden;
+      border-radius: 33px; }
+      .box-present .present-section .img-presentacion img {
+        width: 100%;
+        filter: blur(3px); }
+    .box-present .present-section .link-present {
+      color: #FFFFFF;
+      background-color: #384073;
+      padding: 8px 67px;
+      border-radius: 20px;
+      transition: transform .1s ease-out;
+      transition: background-color .1s linear; }
+      .box-present .present-section .link-present:active {
+        transform: scale(0.9);
+        background-color: #293372; }
+
+.vender-box {
+  display: flex;
+  justify-content: center; }
+  .vender-box .formulario-vender {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    max-width: 1440px; }
+    .vender-box .formulario-vender .vender {
+      display: flex;
+      flex-direction: column;
+      justify-content: stretch;
+      align-items: center;
+      width: 337px;
+      margin: 0px 20px -17px 20px; }
+      .vender-box .formulario-vender .vender .box-article-photo {
+        height: 392px; }
+        .vender-box .formulario-vender .vender .box-article-photo .vender-imagen {
+          border-radius: 22px;
+          border-style: solid;
+          border-width: 3px;
+          border-color: #384073; }
+        .vender-box .formulario-vender .vender .box-article-photo .vender-precio {
+          display: inline-block;
+          background-color: red;
+          color: #FFFFFF;
+          width: 106px;
+          height: 41px;
+          padding-top: 5px;
+          border-radius: 0px 19px 0px 21px;
+          position: relative;
+          bottom: 390px;
+          left: 235px;
+          text-align: center;
+          z-index: 1; }
+      .vender-box .formulario-vender .vender .botones-vender {
+        display: flex;
+        width: 339px;
+        border-radius: 0px 0px 22px 22px;
+        justify-content: space-evenly;
+        position: relative;
+        bottom: 109.5px;
+        backdrop-filter: blur(3.5px);
+        padding: 5px; }
+      .vender-box .formulario-vender .vender .venta-texto {
+        text-align: center; }
+    .vender-box .formulario-vender .tabla-venta {
+      display: flex;
+      flex-direction: column; }
+      .vender-box .formulario-vender .tabla-venta .boton-procesar {
+        width: 153px;
+        height: 41px;
+        position: relative;
+        bottom: 53px;
+        left: 290px; }
+
+.contenedor-quienes {
+  display: flex;
+  justify-content: center; }
+  .contenedor-quienes .quienes-box {
+    display: grid;
+    gap: 28px;
+    grid-template-rows: 0.3fr 1fr 0fr;
+    grid-template-columns: 1.5fr 0.97fr;
+    grid-template-areas: "textUno imgDos" "imgUno imgDos" "imgUno textDos";
+    margin: 28px 80px;
+    max-width: 1440px; }
+    .contenedor-quienes .quienes-box :nth-child(1) {
+      grid-area: textUno; }
+    .contenedor-quienes .quienes-box :nth-child(2) {
+      grid-area: imgUno;
+      overflow: hidden;
+      border-radius: 21px; }
+      .contenedor-quienes .quienes-box :nth-child(2) .quienes-foto-i {
+        height: 100%; }
+    .contenedor-quienes .quienes-box :nth-child(3) {
+      grid-area: imgDos;
+      overflow: hidden;
+      border-radius: 21px; }
+      .contenedor-quienes .quienes-box :nth-child(3) .quienes-foto-d {
+        width: 100%; }
+    .contenedor-quienes .quienes-box :nth-child(4) {
+      grid-area: textDos; }
+
+.box-contactar {
+  display: flex;
+  justify-content: center; }
+  .box-contactar .formulario-box {
+    background-color: #FFFFFF;
+    margin: 28px; }
+    .box-contactar .formulario-box .formulario .cabecera {
+      background-color: #A3D9FF;
+      padding: 28px; }
+    .box-contactar .formulario-box .formulario .tipo-info {
+      display: block;
+      border: none;
+      font-size: 16px;
+      font-family: Arial, Helvetica, sans-serif;
+      border-bottom: 1px solid #826754; }
+    .box-contactar .formulario-box .formulario .ped-form {
+      padding: 28px;
+      padding-top: 40px;
+      padding-bottom: 28px;
+      display: grid;
+      grid-template-rows: repeat(5, auto);
+      grid-template-columns: auto auto;
+      grid-row-gap: 50px;
+      grid-column-gap: 8px; }
+    .box-contactar .formulario-box .formulario .background-grey {
+      background-color: #D9D9D9;
+      max-width: 900px;
+      height: 200px;
+      font-size: 16px;
+      font-family: Arial, Helvetica, sans-serif; }
+    .box-contactar .formulario-box .formulario .marg-mod {
+      margin-bottom: -23px; }
+    .box-contactar .formulario-box .formulario .boton-contactar {
+      width: 158px;
+      grid-column: 2/3;
+      justify-self: end;
+      padding: 18px 24px; }
+
+.recetas-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .recetas-box .receta-foto {
+    max-height: 395px;
+    min-width: 290px; }
+    .recetas-box .receta-foto img {
+      border-radius: 20px; }
+  .recetas-box .receta-nombre {
+    font-size: 25px; }
+
+@media screen and (max-width: 1610px) {
+  .contenedor-quienes .quienes-box :nth-child(3) .quienes-foto-d {
+    width: auto;
+    height: 100%; } }
+
+@media screen and (max-width: 1310px) {
+  .contenedor-quienes .quienes-box {
+    grid-template-rows: 0.3fr 0.5fr auto; }
+    .contenedor-quienes .quienes-box :nth-child(3) .quienes-foto-d {
+      width: 100%;
+      height: auto; }
+  .box-contactar .formulario-box .formulario {
+    max-width: 90vw; } }
+
+@media screen and (max-width: 1200px) {
+  .box-historia {
+    grid-template-rows: auto 500px auto;
+    grid-template-areas: "texto texto" "fotoBandeja fotoGalleta" "textoDos textoDos"; }
+    .box-historia :nth-child(2) {
+      border-radius: 38px 0px 0px 38px; }
+    .box-historia :nth-child(3) .img-historia-dos {
+      border-radius: 0px 38px 38px 0px;
+      width: 100%;
+      height: auto; }
+  .contenedor-quienes .quienes-box :nth-child(3) .quienes-foto-d {
+    width: auto;
+    height: 100%; } }
+
+@media screen and (max-width: 1024px) {
+  .paragraph-style {
+    font-size: 18px; }
+  .contenedor-quienes .quienes-box {
+    grid-template-rows: 0.3fr 1fr 0fr;
+    grid-template-areas: "textUno textUno" "imgUno imgDos" "textDos textDos"; } }
+
+@media screen and (max-width: 991.5px) {
+  .bg-caja-collapse {
+    z-index: 2; }
+  .barra-intermedia {
+    display: none; }
+  .navbar-toggler {
+    z-index: 3; } }
+
+@media screen and (max-width: 917px) {
+  h1 {
+    font-size: 48px; }
+  h2 {
+    font-size: 40px; }
+  h3 {
+    font-size: 31px; }
+  h4 {
+    font-size: 31px; }
+  h5 {
+    font-size: 31px; }
+  .paragraph-style {
+    font-size: 16px; }
+  .box-historia :nth-child(3) .img-historia-dos {
+    border-radius: 0px 38px 38px 0px;
+    width: auto;
+    height: 100%; }
+  .box-present {
+    grid-template-columns: 1fr; }
+    .box-present .present-section .title-present {
+      font-size: 25px;
+      margin-top: 10px; }
+    .box-present .present-section .link-present {
+      font-size: 16px; }
+  .contenedor-quienes .quienes-box {
+    grid-template-rows: 0.3fr 0.8fr 0fr; } }
+
+@media screen and (max-width: 768px) {
+  .titulo-estilo-sec {
+    font-size: 31px; }
+  .subtitulo-estilo-sec {
+    font-size: 20px; }
+  .paragraph-style {
+    font-size: 14px; }
+  .figure-nav {
+    width: 300px;
+    height: 100%; }
+  .contenedor-quienes .quienes-box {
+    grid-template-rows: repeat(4, auto);
+    margin: 23px 10px;
+    grid-template-areas: "textUno textUno" "imgDos imgDos" "textDos textDos" "imgUno imgUno";
+    gap: 14px; }
+  .contenedor-quienes .quienes-box :nth-child(2) .quienes-foto-i {
+    width: 100%;
+    height: auto; }
+  .contenedor-quienes .quienes-box :nth-child(3) .quienes-foto-d {
+    width: 100%;
+    height: auto; }
+  .footer {
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px; }
+    .footer .footer-ubicacion {
+      max-width: 550px;
+      width: 100%; }
+    .footer .info-titulos {
+      font-size: 28px; }
+    .footer .info-datos {
+      font-size: 18px; }
+  .box-historia {
+    margin: 28px 10px;
+    grid-template-rows: auto 67vw auto; } }
+
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: 30px; }
+  h2 {
+    font-size: 30px; }
+  h3 {
+    font-size: 20px; }
+  h4 {
+    font-size: 20px; }
+  h5 {
+    font-size: 20px; }
+  .paragraph-style {
+    font-size: 14px; }
+  h3.cabecera-informacion {
+    font-size: 23px; }
+  h4.subcabecera-informacion {
+    font-size: 23px; } }
+
+@media screen and (max-width: 575.98px) {
+  .figure-nav {
+    width: 225px;
+    height: 100%; }
+  .box-present .present-section .img-presentacion {
+    height: 190px; } }
+
+@media screen and (max-width: 480px) {
+  .box-contactar .formulario-box .formulario .ped-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 90vw; }
+  .box-contactar .formulario-box .formulario .marg-mod {
+    margin-bottom: 18px; }
+  .vender-box .formulario-vender .vender {
+    width: 280.75px; }
+    .vender-box .formulario-vender .vender .box-article-photo {
+      height: 323px; }
+      .vender-box .formulario-vender .vender .box-article-photo .vender-imagen {
+        width: auto;
+        height: 100%; }
+      .vender-box .formulario-vender .vender .box-article-photo .vender-precio {
+        width: 89px;
+        height: 35px;
+        padding-top: 2px;
+        position: relative;
+        bottom: 320px;
+        left: 192px; }
+    .vender-box .formulario-vender .vender .venta-texto {
+      font-size: 16px; }
+    .vender-box .formulario-vender .vender .botones-vender {
+      width: 276.75px;
+      bottom: 97.5px; }
+  .vender-box .formulario-vender .tabla-venta .tabla-img {
+    width: 320px;
+    height: auto; }
+  .vender-box .formulario-vender .tabla-venta .boton-procesar {
+    width: 153px;
+    height: 29px;
+    transform: scale(0.85);
+    position: relative;
+    bottom: 38px;
+    left: 164px; } }
+
+@media screen and (max-width: 360px) {
+  .figure-nav {
+    width: 180px;
+    height: 100%; }
+  .vender-box .formulario-vender .vender {
+    margin-left: 0px;
+    margin-right: 0px; }
+  .vender-box .formulario-vender .tabla-venta .tabla-img {
+    width: 296px;
+    height: auto; }
+  .vender-box .formulario-vender .tabla-venta .boton-procesar {
+    position: relative;
+    bottom: 36px;
+    left: 142px; } }
