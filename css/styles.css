@@ -289,20 +289,48 @@ footer {
         border-radius: 0px 0px 22px 22px;
         justify-content: space-evenly;
         position: relative;
-        bottom: 109.5px;
+        bottom: 78.5px;
         backdrop-filter: blur(3.5px);
         padding: 5px; }
       .vender-box .formulario-vender .vender .venta-texto {
         text-align: center; }
     .vender-box .formulario-vender .tabla-venta {
       display: flex;
-      flex-direction: column; }
+      flex-direction: column;
+      margin-bottom: -460px;
+      margin-top: -30px; }
       .vender-box .formulario-vender .tabla-venta .boton-procesar {
         width: 153px;
         height: 41px;
         position: relative;
         bottom: 53px;
         left: 290px; }
+      .vender-box .formulario-vender .tabla-venta .texto-pedido {
+        display: grid;
+        position: relative;
+        bottom: 584px;
+        left: 56px;
+        position: relative;
+        width: 387px;
+        height: 457px;
+        grid-template-columns: 3.5fr 1.5fr 0.7fr;
+        grid-template-rows: repeat(18, 25px);
+        font-size: 18px; }
+      .vender-box .formulario-vender .tabla-venta .total-pedido {
+        position: relative;
+        top: 553px;
+        right: -325px;
+        font-size: 18px; }
+      .vender-box .formulario-vender .tabla-venta .btn-pago {
+        font-size: 20px;
+        height: 70px; }
+      .vender-box .formulario-vender .tabla-venta .btn-listo {
+        font-size: 20px;
+        height: 70px; }
+      .vender-box .formulario-vender .tabla-venta .btn-off {
+        display: none; }
+      .vender-box .formulario-vender .tabla-venta .btn-on {
+        display: block; }
 
 .contenedor-quienes {
   display: flex;

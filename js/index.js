@@ -1,308 +1,372 @@
-//para aclarar con respecto al html, todo esta siendo vinculado solo a la pagina en la que tengo pensado hacerlo andar, que es la pagina de pedido
-carrito = []
-let opc
-
 class Producto
 {
-    constructor(nombre, precio, cantidad, id)
+    constructor(nombre, precio, foto, cantidad, id, descripcion)
     {
         this.nombre = nombre
         this.precio = precio
+        this.foto = foto
         this.cantidad = cantidad
         this.id = id
+        this.descripcion = descripcion
     }
-
-    calcularMonto()
-    {
-        return (this.precio*this.cantidad)
-    }
-
-    verificarNegativo()
-    {
-        if (this.cantidad < 0 || isNaN(this.cantidad))
-        {
-            this.cantidad = 0
-        }
-    }
-
 }
-
-class Cliente
+class Usuario
 {
-    constructor(nombre, numero, documento, direccion, correo)
+    constructor(nombre, apellido, correo, numero,  documento, direccion)
     {
         this.nombre = nombre
+        this.apellido = apellido
+        this.correo = correo
         this.numero = numero
         this.documento = documento
         this.direccion = direccion
-        this.correo = correo
-    }
-
-    mostrarCliente()
-    {
-        alert('Sus datos de usuario son: \nNombre: '+this.nombre+'\nNro telefonico: '+this.numero + '\nDocumento: '+ this.documento + '\nDireccion: '+this.direccion+ '\nCorreo: '+this.correo)
-    }
-
-    modificarUsuario()
-    {
-        let opcMod
-            do
-            {
-                opcMod = parseInt(prompt('Que desea modificar (0 para salir): \n 1: Nombre \n 2: nro Telefonico \n 3: Documento \n 4: Direccion \n 5: Correo Electronico'))
-                switch(opcMod)
-                {
-                    case 0:
-                        break
-
-                    case 1:
-                        this.nombre = verificarTipo(prompt('Ingrese su nuevo nombre y apellido: '),2,'nombre y apellido')
-                        break
-                        
-                    case 2:
-                        this.numero = verificarTipo(prompt('Ingrese su nuevo nro telefonico: '),1,'nro telefonico')
-                        break
-                    case 3:
-                        this.documento = verificarTipo(prompt('Ingrese su nuevo documento: '),1,'documento')
-                        break
-                    case 4:
-                        this.direccion = prompt('Ingrese su nueva direccion: ')
-                        break
-                    case 5:
-                        this.correoElec = prompt('Ingrese su nueva direccion: ')
-                        break
-                    
-                    default:
-                        alert('Error!! Por favor ingrese una opcion valida')
-
-                }
-
-            }while(opcMod != 0)
-        this.mostrarCliente()
+        
     }
 
 }
 
-arrayProductos = [new Producto("Galleta de chocolate", 250, 0, 1), new Producto("Galleta de vainilla", 250, 0, 2), new Producto("Tarta de coco", 1000, 0, 3)]
+// En este punto se generan los objetos y se obtiene del session y local storage el usuario y el carrito segun corresponda
+//Si el carrito no existe en el storage simplemente se le asigna el array vacio
+//Si el usuario no existe(cerro la ventana/reinicio la computadora) se le asigna undefined, asi ingresa a la creacion de usuario(la funcion la llame modificarUsuario, pero sirve para ambas cosas), seria util en el caso de una notebook o una computadora familiar
+//si una nueva persona entrara o entras desde otro lugar, tenes la obligacion de colocarlos nuevamente y con esto se evitaran errores
 
-menuPrincipal()
+productos = [new Producto("Galleta de chocolate", 250, '../visuales/galletaPedidoNegra-min.webp',0, 'cho', 'Galleta de chocolate con chips'), new Producto("Galleta de vainilla", 250,'../visuales/galletaPedidoBlanca-min.webp', 0, 'vai','Galleta de vainilla con chips')]
+let carrito = JSON.parse(localStorage.getItem('carrito')) || []
+let usuario = JSON.parse(sessionStorage.getItem('usuario')) || undefined
 
-function menuPrincipal()
+function principal()
 {
-    const usuario = crearCliente()
-    do
+    //Esta funcion se encarga de ver donde se esta clickeando y segun cual click se haga, se enviara a una funcion diferente
+    const formulario = document.getElementById('formulario')
+    formulario.addEventListener('click', (e) =>
     {
-        opc = parseInt(prompt('Ingrese la opcion que desea utilizar: \n Opcion 0: Salir \n Opcion 1: Agregar productos a carrito \n Opcion 2: Ver carrito \n Opcion 3: Pagar \n Opcion 4: Cambiar Informacion de Usuario'))
-        switch(opc)
+        e.preventDefault()
+        if(e.target.parentNode.classList.contains('botones-vender')) //se entrara en esta opcion, si se toca en algunos de los botones de algun producto (+, - o reiniciar)
         {
-            case 0:
-                alert('Gracias por comprar con nosotros')
-                break
-            case 1:
-                comprar()
-                break
-            case 2:
-                verCarrito()
-                break
-            case 3:
-                pagar(usuario)
-                break
-            case 4:
-                usuario.modificarUsuario()
-                break
+            modificarCantidad(e)
         }
-    }while (opc != 0)
+        if((e.target.classList.contains('boton-procesar') && (usuario == undefined)) || (e.target.id =='btn-usuario')) 
+        {   
+            //se entrara en esta opcion si el usuario no existe y el mismo quiere ya ir al pago o si el mismo quiere modificar su usuario presionando el boton usuario
+            ocultarBoton("btn-usuario")
+            modificarUsuario()
+        }
+        if((e.target.classList.contains('boton-procesar') && (usuario != undefined))||e.target.classList.contains('btn-usuario-listo'))
+        {
+            //se entrara en esta opcion si se toca el boton de ir al pago (es el que dice "procesar pedido") o si el usuario guarda sus datos
+            prepararVenta()
+        }
+        if(e.target.classList.contains('btn-pago'))
+        {
+            //Se entrara a esta opcion una vez el usuario haya tocado el boton "Ya pague", osea que hizo la transferencia
+            ocultarBoton("btn-usuario")
+            pagoRealizado()
+        }
+        if(e.target.classList.contains('btn-listo'))
+        {
+            //Se entrara a esta opcion una vez el usuario haya terminado de leer la informacion del envio (el envio se hara en 3 dias habiles...)
+            ocultarBoton('btn-listo')
+            //y posteriormente se reiniciaran los datos, ya que obviamente el usuario no querra tener el mismo carrito para siempre
+            reiniciarDatos()
+        }
+    })
 }
 
-function crearCliente()
+function cargarPagina()
 {
-    nombreYape = verificarTipo(prompt('Ingrese su nombre y apellido: '),2, 'nombre y apellido' )
-    nroTelefonico = verificarTipo(prompt('Ingrese su nro telefonico: '),1, 'nro telefonico')
-    documento = verificarTipo(prompt('Ingrese su documento: '),1, 'documento')
-    direccion = prompt('Ingrese su direccion: ')
-    correoElec = prompt('Ingrese su correo electronico: ') 
-    return new Cliente(nombreYape, nroTelefonico, documento, direccion, correoElec)
+    //esta funcion sera utilizada para cargar lo que existe en el localStorage, osea modificar las cantidades y el total que se ve en la hoja 
+    //Ademas genera los productos que se estan vendiendo
+    generarProducto()
+    calcularMontoTotal(false)
+    for(producto of carrito)
+    {
+        modificarListaPedido(producto)
+    }
+    
 }
 
-function comprar()
+function calcularMonto(objeto)
 {
-    let opcCompra 
-    let lista = arrayProductos
-    do
+    //calcula el monto de un producto
+    let cantidad = (objeto.precio*objeto.cantidad)
+    return cantidad
+}
+
+function verificarNegativo(objeto)
+{
+    //verifica si un producto entro en numeros negativos para arreglar este posible error
+    if (objeto.cantidad < 0)
+    {
+        objeto.cantidad = 0
+    }
+}
+
+function verificarCarrito(objeto)
+{
+    //aca lo que se hace, es meter o sacar los productos del carrito y cambiar lo que se ve en la hoja segun corresponda
+    pos = carrito.indexOf(objeto)
+    if(pos != -1 && objeto.cantidad <= 0 )
+    {  
+        borrarPedidoObjeto(objeto)
+        carrito.splice(pos, 1)
+
+    }else if(pos === -1 && (objeto.cantidad > 0))
+    {
+        modificarListaPedido(objeto)
+        carrito.push(objeto)
+    }
+    else if(objeto.cantidad > 0)
+    {
+        modificarListaPedido(objeto)
+    }
+    const carritoJSON = JSON.stringify(carrito)
+    localStorage.setItem('carrito', carritoJSON)
+}
+
+function modificarCantidad(evento)
+{
+    // a partir de un evento, conoce por el padre del nodo de que objeto de trata
+    //una vez aca, se determina que boton se pulso y se cambia la cantidad de ese objeto
+    idObjeto = evento.target.parentNode.id
+    let objeto = carrito.find(producto => producto.id == idObjeto) || productos.find(producto => producto.id == idObjeto)
+
+
+
+    if(evento.target.classList.contains('btn-mas'))
+     {
+        objeto.cantidad++
+     }else if(evento.target.classList.contains('btn-menos'))
+     {
+        objeto.cantidad--
+        verificarNegativo(objeto)
+     } else
     {
         
-        opcCompra = parseInt(prompt('Que desea comprar (0 para salir): \n'+generarListaProductos(lista)+'\n-1: Reiniciar carrito \n-2: Ver carrito \n-3: Ordenar producto de mayor a menor \n-4: Ordenar productos de menor a mayor'))
-
-        if(opcCompra == 0){
-            alert('Va a volver al menu de inicio :)')
-
-        } else if(opcCompra>0 &&  arrayProductos.length>= opcCompra){
-            agregarProducto(arrayProductos[opcCompra - 1])
-
-        } else if(opcCompra == -1){
-            reiniciarCarrito()
-            alert('El carrito se reinicio con exito')
-
-        }else if(opcCompra == -2){
-            verCarrito()
-        }else if(opcCompra == -3){
-            lista = ordenarMayorAMenor(arrayProductos)
-        }else if(opcCompra == -4){
-            lista = ordenarMenorAMayor(arrayProductos)
-
-
-        }else {
-            alert('Error!! Por favor ingrese una opcion valida')
-        }
-
-    }while (opcCompra != 0)
-
+        objeto.cantidad = 0
+    }
     
+    verificarCarrito(objeto)
+    calcularMontoTotal(false)
+
 }
 
-function ordenarMayorAMenor(listaOrdenar)
+function generarProducto()
 {
-    return listaOrdenar.sort((a, b) => b.precio-a.precio)
-}
-function ordenarMenorAMayor(listaOrdenar)
-{
-    return listaOrdenar.sort((a, b) => a.precio-b.precio)
-}
-
-
-function generarListaProductos(lista)
-{
-    const arrayString = lista.map((producto,index) => 
-        {
-            return index+1 + ': '+producto.nombre + ' --> $'+producto.precio
-        })
-    return arrayString.join('\n')
-}
-
-function agregarProducto(producto)
-{
-    producto.cantidad += parseInt(prompt('Cuantas '+ producto.nombre +' quiere agregar al carrito (numero negativo para disminuir cantidad)'))
-    producto.verificarNegativo()
-    enCarrito = carrito.find(prodEn => prodEn.id === producto.id)
-    if(producto.cantidad > 0 && (!enCarrito))
+    //Esta funcion crea y agrega la plantilla de cada producto en el DOM 
+    const div = document.getElementById("objetos-venta")
+    for(const producto of productos)
     {
-        carrito.push(producto)
+        
+        let plantilla = `
+            <span class="box-article-photo">
+                <img class="vender-imagen" src="${producto.foto}" alt="${producto.descripcion}">
+                <span class="vender-precio">$${producto.precio}</span>
+            </span>
+            
+            <span class="venta-texto">${producto.nombre}</span>
+            <span class="botones-vender" id="${producto.id}">
+                <input type="button" value="-" class="boton-estilo boton-redondo btn-menos">
+                <input type="button" value="Restart" class="boton-estilo btn-reiniciar">
+                <input type="button" value="+" class="boton-estilo boton-redondo btn-mas">
+            </span>`
+        articulo = document.createElement('article')
+        articulo.className = 'vender'
+        articulo.innerHTML = plantilla
+        div.appendChild(articulo)
     }
-    else if (producto.cantidad <= 0 && enCarrito)
-    {
-        const posicion = (carrito.indexOf(producto))
-        carrito.splice(posicion, 1)
-    }
-    alert('Se cambio la cantidad deseada con exito')
+
+
 }
 
-function verCarrito()
-{
-    if (carrito.length != 0)
+function modificarListaPedido(objeto)
+{ 
+    //Esta funcion, es agregar un producto o cambiar su cantidad en la lista de la hoja
+    const contenedor = document.getElementById("contenedor-texto-pedido")
+    if(contenedor.querySelector('.'+objeto.id+'-ped') == null)
     {
-        const stringCarrito = carrito.map(producto => 
-            {
-                return producto.cantidad +' '+producto.nombre + '\t--> $'+ (producto.calcularMonto())
-            })
-        alert('Productos del carrito\n'+stringCarrito.join('\n')+ '\nTotal: $'+ calcularMontoTotal())
+        printearEnLista(objeto, contenedor)
     }
     else
     {
-        alert('Porfavor ingrese productos al carrito')
+        printerCambioEnLista(objeto)
     }
     
 }
 
-function calcularMontoTotal()
+function printearEnLista(objeto, contenedor)
 {
-    const montoTotal = carrito.reduce((contador, producto) => contador + (producto.calcularMonto()), 0)
-    return montoTotal
+    //Va agregando cada una de las partes de la hoja en cada iteracion en la zona del grid donde va, segun su orden
+    texto = [objeto.nombre, objeto.cantidad, '$'+calcularMonto(objeto)]
+    for(i=0; i<3;i++)
+    {
+        agregar = document.createElement('p')
+        agregar.className = objeto.id+'-ped'
+        agregar.innerText = texto[i]
+        contenedor.appendChild(agregar)
+    }
 }
 
-
-function pagar(usuario)
+function printerCambioEnLista(objeto)
 {
-    let precioEntrega = 0
+    //cambia la cantidad y el monto total de ese producto en la lista
+    const objetoLista = document.getElementsByClassName(objeto.id+'-ped')
+    objetoLista[1].innerText = objeto.cantidad
+    objetoLista[2].innerText = '$'+calcularMonto(objeto)
+}
+
+function borrarPedidoObjeto(objeto)
+{
+    //borra el producto de la lista, tomando todos los nodo con esa clase especifica (sera dada por el id del objeto y un agregado) y eliminandolos uno por uno
+    const contenedor = document.getElementById("contenedor-texto-pedido")
+    const arrayHijos = document.getElementsByClassName(objeto.id+'-ped')
+    contenedor.removeChild(arrayHijos[2])
+    contenedor.removeChild(arrayHijos[1])
+    contenedor.removeChild(arrayHijos[0])
+}
+function calcularMontoTotal(verif)
+{
+    //calcula el monto total, entre todos los productos que hay en el carrito
+    //Esta funcion tiene 2 opcion, esta la opcion para retornar el valor del monto total o la opcion de modificarlo en el DOM segun haga falta
+    //true --> retorna el valor
+    //false --> cambia el DOM
+    const montoTotal = carrito.reduce((contador, producto) => contador + (calcularMonto(producto)), 0)
+    if(verif)
+    {
+        return montoTotal
+    }
+    const textoMonto = document.getElementById("total-pedido")
+    textoMonto.innerText = "$"+montoTotal
+}
+
+function ocultarBoton(nombreBoton)
+{
+    //oculta un boton recibiendo su nombre como parametro
+    boton = document.getElementById(nombreBoton)
+    boton.classList.replace("btn-on", "btn-off")
+}
+
+function mostrarBoton(nombreBoton)
+{
+    //muestra un boton recibiendo su nombre como parametro
+    boton = document.getElementById(nombreBoton)
+    boton.classList.replace("btn-off", "btn-on")
+}
+
+function prepararVenta()
+{
+    //verifica si existen productos en el carrito, si no existen mostrara un mensaje para que el usuario vuelva y agregue
+    //Y si existen, activara la plantilla con los datos del pago y la aclaracion
+    //Ademas agrega el boton de listo, para que el usuario confirme que hizo la transferencia
+    mostrarBoton("btn-usuario")
+    const contenedorVenta = document.getElementById("contenedor-venta")
+    let plantilla
     if(carrito.length == 0)
-    {
-        alert('Su carrito esta vacio porfavor, rellenelo antes de intentar pagar')
-    }
-    else
-    {
-        if(!(entrega()))
-        {
-            precioEntrega = 500
-        }
+   {
+    ocultarBoton("btn-pago")
+     plantilla = "Error!!! Porfavor, ingrese productos a su carrito antes de intentar hacer el pago"
+     contenedorVenta.innerText = plantilla
+   }
+   else
+   {
+    mostrarBoton("btn-pago")
+    plantilla = `Hola ${usuario.nombre}!!
+    El monto a pagar es de ${'$'+calcularMontoTotal(true)}
+    El pago se realiza mediante transferencia
+    Enviar el dinero a:
+    CVU: 120312983910248
+    Alias: abcdef
+    CUIT: 20-19238140-1
 
-        let mensajeTransaccion = ' El monto a pagar es de $'+(calcularMontoTotal()+precioEntrega)+'\n El pago se realiza por transaccion \n Enviar el dinero al siguiente CVU: 120312983910248 \n alias: abcdef \n CUIT: 20-19238140-1 \n Enviar el comprobante de la transaccion al siguiente correo: abcde@gmail.com \n La transaccion fue realizada?'
-        if(confirm(mensajeTransaccion))
-        {
-            let mensajeUsuario = 'Su pedido estara llegando en 5 dias habiles a la direccion: '+ usuario.direccion+ '\nAdemas podra recibir una llamada al numero que asigno: '+usuario.numero+ '\nDesea cambiar alguno de estos datos?'
-            if(confirm(mensajeUsuario))
-            {
-                alert('Se lo llevara a la modificacion de usuario')
-                usuario.modificarUsuario()
-            }
-            alert('Muchas gracias por comprar nuestros productos :)')
-            reiniciarCarrito()
-        }
-        else
-        {
-            alert('Lamentamos que no haya comprado lo que tenia en el carrito, esperamos tener nuevos pedidos de usted (El carrito se mantendra por si aun quiere realizar la compra)')
-        }
-    }
+    ACLARACION:
+    El pedido debera ser recibido
+    por la persona con el numero de
+    documento ${usuario.documento} o
+    un adulto mayor de 18 años
+
+    Asegurese que los datos
+    a continuacion, son correctos
+
+    Direccion: ${usuario.direccion}
+    Telefono: ${usuario.numero}
+    Mail: ${usuario.correo}
+    
+    Si necesita modificar alguno, utilice el boton usuario que se encuentra en la parte superior
+    
+    Una vez haya hecho el pago
+    toque el boton de abajo
+    que dice "Ya pague"`
+
+    
+    contenedorVenta.innerText = plantilla
+   }
+    
 }
 
-
-function entrega()
+function pagoRealizado()
 {
-    let ciclo = true
-    let modoEntrega
-    do
-    {
-        modoEntrega = parseInt(prompt('Seleccione una forma de entrega: \n 1: Retiro fisico \n 2: Envio por correo'))
-        switch(modoEntrega)
-        {
-            case 1:
-                return true
-            case 2:
-                return false
-            default:
-                alert('Porfavor ingrese una forma de envio de las posibles')
-                break
-        }
-    }while(ciclo)
+    //activa el boton de listo para que el usuario confirme la lectura de los datos del envio y cierra el colapse
+    ocultarBoton('btn-pago')
+    mostrarBoton('btn-listo')
+    const div = document.getElementById("contenedor-venta")
+    div.innerText = `Su pago sera procesado en las proximas 24 horas
+    
+    El pedido llegara a su casa en los proximos 3 dias habiles
+    Muchas gracias por comprar con nosotros`
 }
 
-function reiniciarCarrito()
+function reiniciarDatos()
 {
-    for (const producto of arrayProductos)
+    //reinicia todos los datos de los productos en el carrito y los productos del localStorage, ademas calcula el monto total, para que en la lista, se vuelva a ver como 0
+    for(const producto of carrito)
     {
         producto.cantidad = 0
+        borrarPedidoObjeto(producto)
     }
     carrito = []
+    localStorage.removeItem('carrito')
+    calcularMontoTotal(false)
 }
 
-
-function verificarTipo(dato, opcTipo, stringDato)
+function crearFormUsuario()
 {
-    // 1 - verifica que sea dato numerico (documento o telefono)
-    // 2 - verifica que sea un string (nombre apellido por ejemplo)
+    //crea la plantilla para el formulario utilizado en la creacion de usuario
+    plantilla = `
+    <label for="" class="d-block">Nombre</label>
+    <input type="text" class="datos-usuario mb-2" value="${usuario?.nombre || "Nombre"}" required>
+    <label for="" class="d-block">Apellido</label>
+    <input type="text" class="datos-usuario mb-2" value="${usuario?.apellido || "Apellido"}" required>
+    <label for="" class="d-block">Mail</label>
+    <input type="email" class="datos-usuario mb-2" value="${usuario?.correo || "Mail"}" required>
+    <label for="" class="d-block">Numero telefonico</label>
+    <input type="tel" class="datos-usuario mb-2" value="${usuario?.numero || "Numero de Telefono"}" required>
+    <label for="" class="d-block">Documento</label>
+    <input type="tel" class="datos-usuario mb-2" value="${usuario?.documento || "Documento"}" required>
+    <label for="" class="d-block">Direccion</label>
+    <input type="text" class="datos-usuario mb-2" value="${usuario?.direccion || "Direccion"}" required>
+    <button class="d-block mt-2 btn-usuario-listo boton-estilo">Guardar</button>`
 
-    switch(opcTipo)
-    {
-        case 1:
-            while(isNaN(dato))
-            {
-                dato = parseInt(prompt('Porfavor, ingrese su '+ stringDato + ' correctamente: '))
-            }
-            break
-        case 2:
-            while(!(isNaN(dato)))
-            {
-                dato = parseInt(prompt('Porfavor, ingrese su '+ stringDato + ' correctamente: '))
-            }
-            break
-    }
-
-    return dato
+  return plantilla
 }
+
+function modificarUsuario()
+{
+    //agrega el formulario al dom, y luego cuando el usuario quiera guardar, crea un objeto usuario con esos datos y los asigna a la variable global usuario ademas lo agrega al sessionStorage
+    const contenedorVenta = document.getElementById("contenedor-venta")
+    contenedorVenta.innerHTML = crearFormUsuario()
+    contenedorVenta.addEventListener("click", (e) => 
+    {
+        e.preventDefault()
+        if(e.target.classList.contains('btn-usuario-listo'))
+        {
+                const datos = document.getElementsByClassName("datos-usuario")
+                usuario = new Usuario(datos[0].value, datos[1].value, datos[2].value, datos[3].value, datos[4].value, datos[5].value)
+
+                usuarioJson =JSON.stringify(usuario)
+                sessionStorage.setItem('usuario',usuarioJson)
+        }
+    })
+    
+}
+
+cargarPagina()
+principal()
