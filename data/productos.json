@@ -1,0 +1,20 @@
+[
+    {
+    "nombre":"Galleta de chocolate",
+    "precio":250,
+    "foto":"../visuales/galletaPedidoNegra-min.webp",
+    "cantidad":0,
+    "id":"cho",
+    "descripcion":"Galleta de chocolate con chips"
+    },
+
+    {
+    "nombre":"Galleta de vainilla",
+    "precio":250,
+    "foto":"../visuales/galletaPedidoBlanca-min.webp",
+    "cantidad":0,
+    "id":"vai",
+    "descripcion":"Galleta de vainilla con chips"
+    }
+
+]

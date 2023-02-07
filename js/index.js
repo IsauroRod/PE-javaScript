@@ -1,15 +1,4 @@
-class Producto
-{
-    constructor(nombre, precio, foto, cantidad, id, descripcion)
-    {
-        this.nombre = nombre
-        this.precio = precio
-        this.foto = foto
-        this.cantidad = cantidad
-        this.id = id
-        this.descripcion = descripcion
-    }
-}
+
 class Usuario
 {
     constructor(nombre, apellido, correo, numero,  documento, direccion)
@@ -30,9 +19,20 @@ class Usuario
 //Si el usuario no existe(cerro la ventana/reinicio la computadora) se le asigna undefined, asi ingresa a la creacion de usuario(la funcion la llame modificarUsuario, pero sirve para ambas cosas), seria util en el caso de una notebook o una computadora familiar
 //si una nueva persona entrara o entras desde otro lugar, tenes la obligacion de colocarlos nuevamente y con esto se evitaran errores
 
-productos = [new Producto("Galleta de chocolate", 250, '../visuales/galletaPedidoNegra-min.webp',0, 'cho', 'Galleta de chocolate con chips'), new Producto("Galleta de vainilla", 250,'../visuales/galletaPedidoBlanca-min.webp', 0, 'vai','Galleta de vainilla con chips')]
+let productos
 let carrito = JSON.parse(localStorage.getItem('carrito')) || []
 let usuario = JSON.parse(sessionStorage.getItem('usuario')) || undefined
+
+function getProducts()
+{
+    fetch('../data/productos.json')
+    .then((resp) => resp.json())
+    .then(data =>
+        {
+            productos = data
+            cargarPagina()
+        })
+}
 
 function principal()
 {
@@ -47,6 +47,7 @@ function principal()
         }
         if((e.target.classList.contains('boton-procesar') && (usuario == undefined)) || (e.target.id =='btn-usuario')) 
         {   
+            
             //se entrara en esta opcion si el usuario no existe y el mismo quiere ya ir al pago o si el mismo quiere modificar su usuario presionando el boton usuario
             ocultarBoton("btn-usuario")
             modificarUsuario()
@@ -60,15 +61,14 @@ function principal()
         {
             //Se entrara a esta opcion una vez el usuario haya tocado el boton "Ya pague", osea que hizo la transferencia
             ocultarBoton("btn-usuario")
-            pagoRealizado()
-        }
-        if(e.target.classList.contains('btn-listo'))
-        {
-            //Se entrara a esta opcion una vez el usuario haya terminado de leer la informacion del envio (el envio se hara en 3 dias habiles...)
-            ocultarBoton('btn-listo')
-            //y posteriormente se reiniciaran los datos, ya que obviamente el usuario no querra tener el mismo carrito para siempre
+            Swal.fire({
+                icon: 'success',
+                title: 'Pago realizado',
+                text: 'Su pago sera procesado en las proximas 24 horas, el pedido llegara a su casa en los proximos 3 dias habiles. Muchas gracias por comprar con nosotros'
+            })
             reiniciarDatos()
         }
+
     })
 }
 
@@ -154,6 +154,7 @@ function generarProducto()
 {
     //Esta funcion crea y agrega la plantilla de cada producto en el DOM 
     const div = document.getElementById("objetos-venta")
+
     for(const producto of productos)
     {
         
@@ -305,13 +306,7 @@ function prepararVenta()
 function pagoRealizado()
 {
     //activa el boton de listo para que el usuario confirme la lectura de los datos del envio y cierra el colapse
-    ocultarBoton('btn-pago')
-    mostrarBoton('btn-listo')
-    const div = document.getElementById("contenedor-venta")
-    div.innerText = `Su pago sera procesado en las proximas 24 horas
     
-    El pedido llegara a su casa en los proximos 3 dias habiles
-    Muchas gracias por comprar con nosotros`
 }
 
 function reiniciarDatos()
@@ -367,6 +362,5 @@ function modificarUsuario()
     })
     
 }
-
-cargarPagina()
+getProducts()
 principal()
