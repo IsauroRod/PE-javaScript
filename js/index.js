@@ -74,5 +74,3 @@ function mostrarBoton(nombreBoton)
 
 document.addEventListener('DOMContentLoaded', getProducts())
 document.addEventListener('DOMContentLoaded', principal())
-
-principal()
